@@ -7,6 +7,8 @@ from .models import employee
 from .models import offers
 from .models import fooditem
 from .models import waitermessage
+from .models import cart
+from .models import order
 from .serializers import TableSerializer
 from .serializers import IPSerializer
 from .serializers import foodcatSerializer
@@ -15,6 +17,8 @@ from .serializers import fooditemSerializer
 from .serializers import employeeSerializer
 from .serializers import offersSerializer
 from .serializers import waitermessageSerializer
+from .serializers import orderSerializer
+from .serializers import cartSerializer
 from rest_framework import viewsets
 from django.http import JsonResponse
 import cv2
@@ -55,6 +59,17 @@ class fooditemview(viewsets.ModelViewSet):
 class waitermessageview(viewsets.ModelViewSet):
     queryset = waitermessage.objects.all()
     serializer_class = waitermessageSerializer
+
+
+class orderview(viewsets.ModelViewSet):
+    queryset = order.objects.all()
+    serializer_class = orderSerializer
+
+
+class cartview(viewsets.ModelViewSet):
+    queryset = cart.objects.all()
+    serializer_class = cartSerializer
+
 
 def process_frames(frame):
     decoded_objs = decode(frame)

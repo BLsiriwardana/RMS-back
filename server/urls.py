@@ -26,6 +26,8 @@ from Tables.views import employeeview
 from Tables.views import fooditemview
 from Tables.views import offersview
 from Tables.views import waitermessageview
+from Tables.views import cartview
+from Tables.views import orderview 
 from rest_framework import routers
  
 route = routers.DefaultRouter()
@@ -55,6 +57,12 @@ fooditemroute.register("",fooditemview, basename="fooditem View")
 waitermessageroute = routers.DefaultRouter()
 waitermessageroute.register("",waitermessageview, basename="offers View")
 
+cartroute = routers.DefaultRouter()
+cartroute.register("",cartview, basename="offers View")
+
+orderroute = routers.DefaultRouter()
+orderroute.register("",orderview, basename="offers View")
+
 urlpatterns = [
     path('', include('Tables.urls')),
     path('admin/', admin.site.urls),
@@ -66,6 +74,8 @@ urlpatterns = [
     path('off/', include(offersroute.urls)),
     path('food/', include(fooditemroute.urls)),
     path('wm/', include(waitermessageroute.urls)),
-    
+    path('message/', include(waitermessageroute.urls)),
+    path('carts/', include(cartroute.urls)),    
+     path('order/', include(orderroute.urls)),    
 ]+static(settings.MEDIA_URL, document_root =settings.MEDIA_ROOT)
 

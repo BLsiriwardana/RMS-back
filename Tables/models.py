@@ -69,11 +69,12 @@ class IPaddress1(models.Model):
 
 class foodcat(models.Model):
    
-    catImage = models.ImageField(upload_to='catimg',blank=False, null=False)
+    catImage = models.ImageField(upload_to='catimg',blank=False, null=True)
     cat_id = models.CharField(max_length=225, primary_key=True)
     catname= models.CharField(max_length=225)
     Description= models.CharField(max_length=225)
-    add_date = models.CharField(max_length=225)
+    time = models.TimeField(auto_now_add=True, null=True)
+    add_date = models.DateField(auto_now_add=True)
     number_items = models.CharField(max_length=225, null=True) 
      
     def __str__(self) :

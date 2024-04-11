@@ -37,6 +37,7 @@ from Tables.views import get_order_by_id
 from Tables.views import get_cart_items
 from Tables.views import get_data
 from Tables.views import get_chef_employees
+from Tables.views import add_food_category
 route = routers.DefaultRouter()
 route.register("",Tableview, basename="Table View")
 
@@ -97,5 +98,6 @@ urlpatterns = [
     path('getcart/', get_cart_items, name='get_cart_items'),
     path('get_data/', get_data, name='get_data'),
     path('chef_employees/', get_chef_employees, name='chef-employees'),
+     path('add-food-category/', add_food_category, name='food category'),
 ]+static(settings.MEDIA_URL, document_root =settings.MEDIA_ROOT)
 

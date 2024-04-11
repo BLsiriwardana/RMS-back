@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import Tables
 from .models import foodcat
 from .models import IPaddress1
@@ -29,7 +29,7 @@ from rest_framework.response import Response
 
 from rest_framework.decorators import api_view
 import datetime
-
+from .forms import FoodCatForm
 class Tableview(viewsets.ModelViewSet):
     queryset = Tables.objects.all()
     serializer_class = TableSerializer
@@ -179,3 +179,13 @@ def get_data(request):
 def get_chef_employees(request):
     chef_employees = employee.objects.filter(role__iexact="chef").values()
     return JsonResponse(list(chef_employees), safe=False)
+
+def add_food_category(request):
+    if request.method == 'POST':
+        form = FoodCatForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('success')  # Redirect to success page after successful form submission
+    else:
+        form = FoodCatForm()
+    return render(request, 'add_food_category.html', {'form': form})

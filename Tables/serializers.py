@@ -9,6 +9,7 @@ from .models import fooditem
 from .models import waitermessage
 from .models import cart
 from .models import order
+from .models import Tusers
 
 
 class TableSerializer(serializers.ModelSerializer):
@@ -62,5 +63,9 @@ class cartSerializer(serializers.ModelSerializer):
 class orderSerializer(serializers.ModelSerializer):
     class Meta:
         model = order
+        fields = '__all__'
+class TusersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tusers
         fields = '__all__'
   

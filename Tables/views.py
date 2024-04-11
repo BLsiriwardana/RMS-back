@@ -23,7 +23,12 @@ from rest_framework import viewsets
 from django.http import JsonResponse
 import cv2
 from pyzbar.pyzbar import decode
- 
+from .serializers import TusersSerializer
+from .models import Tusers
+from rest_framework.response import Response
+
+from rest_framework.decorators import api_view
+import datetime
 
 class Tableview(viewsets.ModelViewSet):
     queryset = Tables.objects.all()
@@ -70,6 +75,10 @@ class cartview(viewsets.ModelViewSet):
     queryset = cart.objects.all()
     serializer_class = cartSerializer
 
+class Tusersview(viewsets.ModelViewSet):
+    queryset = Tusers.objects.all()
+    serializer_class = TusersSerializer
+
 
 def process_frames(frame):
     decoded_objs = decode(frame)
@@ -91,9 +100,82 @@ def process_video_stream():
         yield qr_data_list
     cap.release()
 
+
+@api_view(['GET'])
 # Define the API view function
 def qr_code_api(request):
     qr_data_list = next(process_video_stream())
     return JsonResponse({"qr_data_list": qr_data_list}) 
 
+
+
+def get_records_by_user_id(request):
+    user_id = request.GET.get('user_id')
+    records = IPaddress1.objects.filter(user_id=user_id).values()
+    return JsonResponse(list(records), safe=False)
  
+def get_records_by_food_id(request):
+    food_id = request.GET.get('food_id')
+    records = cart.objects.filter(food_id=food_id).values()
+    return JsonResponse(list(records), safe=False)
+
+def get_order_count(request):
+    # Retrieve table_id from request parameters
+    table_id = request.GET.get('table_id', None)
+
+    if table_id is not None:
+        # Filter orders by current date and the provided table_id, and count the number of records
+        order_count = order.objects.filter(table_id=table_id).count()
+        return JsonResponse({'order_count': order_count})
+    else:
+        # If table_id is not provided, return an error response
+        return JsonResponse({'error': 'table_id is required'}, status=400)
+
+ 
+
+def get_order_by_id(request, order_id):
+    try:
+        # Retrieve order based on the provided order_id
+        order = order.objects.get(order_id=order_id)
+        order_data = {
+            'id': order.id,
+            'order_id': order.order_id,
+            'user_id': order.user_id,
+            'table_id': order.table_id,
+            'name': order.name,
+            'phone': order.phone,
+            'time': order.time.strftime('%H:%M:%S'),
+            'date': order.date.strftime('%Y-%m-%d'),
+            'payment_method': order.payment_method,
+            'value': order.value,
+            'pay_status': order.pay_status
+        }
+        return JsonResponse(order_data)
+    except order.DoesNotExist:
+        return JsonResponse({'error': 'Order not found'}, status=404)
+
+def get_cart_items(request):
+        order_id = request.GET.get('order_id', None)
+        records = cart.objects.filter(order_id= order_id).values()
+        return JsonResponse(list(records), safe=False)
+    
+def get_data(request):
+    # Retrieve session information
+    session_phone = request.session.get('phoneNumber')
+    session_name = request.session.get('name')
+    session_user_id = request.session.get('ipid')
+    dd='23'
+    # Query data based on session information
+    queryset = order.objects.filter(user_id=session_user_id, phone='+94705255010', value="8500")
+
+    # Serialize queryset
+    data = [{'order_id': obj.order_id, 'table_id': obj.table_id} for obj in queryset]
+
+    return JsonResponse(data, safe=False)
+
+ 
+ 
+
+def get_chef_employees(request):
+    chef_employees = employee.objects.filter(role__iexact="chef").values()
+    return JsonResponse(list(chef_employees), safe=False)

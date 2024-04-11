@@ -29,7 +29,14 @@ from Tables.views import waitermessageview
 from Tables.views import cartview
 from Tables.views import orderview 
 from rest_framework import routers
- 
+from Tables.views import get_records_by_user_id
+from Tables.views import get_records_by_food_id
+from Tables.views import Tusersview
+from Tables.views import get_order_count
+from Tables.views import get_order_by_id
+from Tables.views import get_cart_items
+from Tables.views import get_data
+from Tables.views import get_chef_employees
 route = routers.DefaultRouter()
 route.register("",Tableview, basename="Table View")
 
@@ -63,10 +70,16 @@ cartroute.register("",cartview, basename="offers View")
 orderroute = routers.DefaultRouter()
 orderroute.register("",orderview, basename="offers View")
 
+Tusersroute = routers.DefaultRouter()
+Tusersroute.register("",Tusersview, basename="user View")
+
+
+
 urlpatterns = [
     path('', include('Tables.urls')),
     path('admin/', admin.site.urls),
     path('api/', include(route.urls)),
+    path('ip/records/', get_records_by_user_id, name='get_records_by_user_id'),
     path('ip/', include(Iproute.urls)),
     path('cat/', include(foodcatroute.urls)),
     path('await/', include(asignwaitersviewroute.urls)),
@@ -76,6 +89,13 @@ urlpatterns = [
     path('wm/', include(waitermessageroute.urls)),
     path('message/', include(waitermessageroute.urls)),
     path('carts/', include(cartroute.urls)),    
-     path('order/', include(orderroute.urls)),    
+    path('records/', get_records_by_food_id, name=' get_records_by_food_id'),
+    path('order/', include(orderroute.urls)),    
+    path('tusers/', include(Tusersroute.urls)), 
+    path('get_order_count/', get_order_count, name='get_order_count'),
+    path('get_order_by_id/<str:order_id>/', get_order_by_id, name='get_order_by_id'),
+    path('getcart/', get_cart_items, name='get_cart_items'),
+    path('get_data/', get_data, name='get_data'),
+    path('chef_employees/', get_chef_employees, name='chef-employees'),
 ]+static(settings.MEDIA_URL, document_root =settings.MEDIA_ROOT)
 

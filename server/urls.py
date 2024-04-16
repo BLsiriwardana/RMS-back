@@ -39,6 +39,12 @@ from Tables.views import get_data
 from Tables.views import get_chef_employees
 from Tables.views import add_food_category
 from Tables.views import POSorderview
+from Tables.views import POScartview
+from Tables.views import get_pos_order_count
+from Tables.views import get_count
+from Tables.views import get_records_pos_id
+from Tables.views import get_records_pos_order
+from Tables.views import get_waiter_employees
 route = routers.DefaultRouter()
 route.register("",Tableview, basename="Table View")
 
@@ -78,6 +84,9 @@ Tusersroute.register("",Tusersview, basename="user View")
 POSordeRroute = routers.DefaultRouter()
 POSordeRroute.register("",POSorderview, basename="POS View")
 
+POScartRroute = routers.DefaultRouter()
+POScartRroute.register("",POScartview, basename="POS cart View")
+
 urlpatterns = [
     path('', include('Tables.urls')),
     path('admin/', admin.site.urls),
@@ -100,7 +109,13 @@ urlpatterns = [
     path('getcart/', get_cart_items, name='get_cart_items'),
     path('get_data/', get_data, name='get_data'),
     path('chef_employees/', get_chef_employees, name='chef-employees'),
+     path('waiter_employees/', get_waiter_employees, name='waiter-employees'),
     path('add-food-category/', add_food_category, name='food category'),
+    path('get_pos_count/', get_pos_order_count, name='POS count'),
     path('pos_order/', include(POSordeRroute.urls)),
+    path('pos_cart/', include(POScartRroute.urls)),
+    path('more_count/', get_count, name='counts'),
+    path('pos_records/', get_records_pos_id, name='cart filter'),
+    path('pos_orders_time/', get_records_pos_order, name='cart filter'),
 ]+static(settings.MEDIA_URL, document_root =settings.MEDIA_ROOT)
 

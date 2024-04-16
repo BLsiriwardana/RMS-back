@@ -84,7 +84,11 @@ class Tusersview(viewsets.ModelViewSet):
 class POSorderview(viewsets.ModelViewSet):
     queryset = POSorder.objects.all()
     serializer_class = POSorderSerializer
-    
+
+class POScartview(viewsets.ModelViewSet):
+    queryset = POScart.objects.all()
+    serializer_class = POScartSerializer
+
 def process_frames(frame):
     decoded_objs = decode(frame)
     qr_data_list = []
@@ -136,7 +140,9 @@ def get_order_count(request):
         # If table_id is not provided, return an error response
         return JsonResponse({'error': 'table_id is required'}, status=400)
 
- 
+def get_pos_order_count(request):
+    order_count = POSorder.objects.all().count()
+    return JsonResponse({'POS_order_count': order_count})
 
 def get_order_by_id(request, order_id):
     try:
@@ -171,7 +177,7 @@ def get_data(request):
     session_user_id = request.session.get('ipid')
     dd='23'
     # Query data based on session information
-    queryset = order.objects.filter(user_id=session_user_id, phone='+94705255010', value="8500")
+    queryset = order.objects.filter(user_id=session_user_id)
 
     # Serialize queryset
     data = [{'order_id': obj.order_id, 'table_id': obj.table_id} for obj in queryset]
@@ -185,6 +191,9 @@ def get_chef_employees(request):
     chef_employees = employee.objects.filter(role__iexact="chef").values()
     return JsonResponse(list(chef_employees), safe=False)
 
+def get_waiter_employees(request):
+    waiter_employees = employee.objects.filter(role__iexact="waiter").values()
+    return JsonResponse(list(waiter_employees), safe=False)
 
 def add_food_category(request):
     if request.method == 'POST':
@@ -197,4 +206,30 @@ def add_food_category(request):
     return render(request, 'add_food_category.html', {'form': form})
 
 
- 
+def get_count(request):
+    # Retrieve table_id from request parameters
+  #  POSorder_id = request.GET.get('order_id', None)
+    POSorder_id = 'POS002'
+    if POSorder_id is not None:
+        # Filter orders by current date and the provided table_id, and count the number of records
+        order_count = POScart.objects.filter(order_id=POSorder_id ).count()
+        if order_count == 0 :
+           return JsonResponse({'empty_order_count': order_count})
+        else:
+           return JsonResponse({'order_count': order_count})
+    else:
+        # If table_id is not provided, return an error response
+        return JsonResponse({'error': 'table_id is required'}, status=400)
+    
+
+def get_records_pos_id(request):
+    value = request.GET.get('value')
+    num1_str, num2_str = value.split('_')
+    records = POScart.objects.filter(order_id=num1_str, food_id=num2_str ).values()
+    return JsonResponse(list(records), safe=False)
+
+
+def get_records_pos_order(request):
+    value = request.GET.get('value')
+    records = POScart.objects.filter(order_id=value).values()
+    return JsonResponse(list(records), safe=False)

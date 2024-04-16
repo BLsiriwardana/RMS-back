@@ -79,4 +79,8 @@ class POSorderSerializer(serializers.ModelSerializer):
     class Meta:
         model = POSorder
         fields = '__all__'
-  
+
+class POScartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = POScart
+        fields = '__all__'  

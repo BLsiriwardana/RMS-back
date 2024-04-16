@@ -82,12 +82,13 @@ class foodcat(models.Model):
 
 class asignwaiters(models.Model):
     table_id = models.CharField(max_length=225, primary_key=True)
-    emp_id = models.CharField(max_length=225)
-    emp_name = models.CharField(max_length=225)
-    emp_status = models.CharField(max_length=225)
-    temp_id = models.CharField(max_length=225)
-    temp_name = models.CharField(max_length=225)
-    temp_status = models.CharField(max_length=225)
+    table_number =  models.CharField(max_length=225,  null=True)
+    emp_id = models.CharField(max_length=225,  null=True)
+    emp_name = models.CharField(max_length=225, null=True)
+    emp_status = models.CharField(max_length=225, null=True)
+    temp_id = models.CharField(max_length=225, null=True)
+    temp_name = models.CharField(max_length=225, null=True)
+    temp_status = models.CharField(max_length=225, null=True)
     asign_date = models.DateField(auto_now_add=True)
 
     def __str__(self) :
@@ -213,7 +214,7 @@ class Tusers(models.Model):
     
 class POSorder(models.Model):
     order_id = models.CharField(max_length=225,primary_key=True)
-    POS_id = models.CharField(max_length=225)
+    POS_id = models.CharField(max_length=225,null=True)
     name = models.CharField(max_length=225, null=True)
     phone = models.CharField(max_length=225, null=True)
     waiter = models.CharField(max_length=225, null=True)
@@ -228,3 +229,16 @@ class POSorder(models.Model):
     
     def __str__(self) :
         return self.order_id
+
+class POScart(models.Model):
+    food_id = models.CharField(max_length=225)
+    food_name = models.CharField(max_length=225)
+    order_id = models.CharField(max_length=225)
+    quantity = models.IntegerField()
+    order_des = models.TextField(null=True)
+    price = models.IntegerField()
+    time = models.TimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
+    def __str__(self) :
+        return self.food_id  
+

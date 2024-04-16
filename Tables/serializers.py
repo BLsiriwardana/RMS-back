@@ -74,4 +74,9 @@ class waiterAssignHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = waiterAssignHistory
         fields = '__all__'
+
+class POSorderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = POSorder
+        fields = '__all__'
   

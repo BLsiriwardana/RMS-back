@@ -81,7 +81,10 @@ class Tusersview(viewsets.ModelViewSet):
     queryset = Tusers.objects.all()
     serializer_class = TusersSerializer
 
-
+class POSorderview(viewsets.ModelViewSet):
+    queryset = POSorder.objects.all()
+    serializer_class = POSorderSerializer
+    
 def process_frames(frame):
     decoded_objs = decode(frame)
     qr_data_list = []

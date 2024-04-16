@@ -209,4 +209,19 @@ class Tusers(models.Model):
     def __str__(self) :
         return self.user_id
     
+class POSorder(models.Model):
+    order_id = models.CharField(max_length=225,primary_key=True)
+    POS_id = models.CharField(max_length=225)
+    name = models.CharField(max_length=225, null=True)
+    phone = models.CharField(max_length=225, null=True)
+    waiter = models.CharField(max_length=225, null=True)
+    chef = models.CharField(max_length=225, null=True)
+    time = models.TimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
+    payment_method = models.CharField(max_length=225, null=True)
+    value = models.CharField(max_length=225, null=True)
+    pay_status = models.CharField(max_length=225,null=True)
+    action_status = models.CharField(max_length=225,null=True)
  
+    def __str__(self) :
+        return self.order_id

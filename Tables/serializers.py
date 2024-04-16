@@ -10,6 +10,7 @@ from .models import waitermessage
 from .models import cart
 from .models import order
 from .models import Tusers
+from .models import *
 
 
 class TableSerializer(serializers.ModelSerializer):
@@ -67,5 +68,10 @@ class orderSerializer(serializers.ModelSerializer):
 class TusersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tusers
+        fields = '__all__'
+
+class waiterAssignHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = waiterAssignHistory
         fields = '__all__'
   

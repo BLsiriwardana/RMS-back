@@ -19,6 +19,8 @@ from .serializers import offersSerializer
 from .serializers import waitermessageSerializer
 from .serializers import orderSerializer
 from .serializers import cartSerializer
+from .serializers import *
+from .models import *
 from rest_framework import viewsets
 from django.http import JsonResponse
 import cv2
@@ -180,6 +182,7 @@ def get_chef_employees(request):
     chef_employees = employee.objects.filter(role__iexact="chef").values()
     return JsonResponse(list(chef_employees), safe=False)
 
+
 def add_food_category(request):
     if request.method == 'POST':
         form = FoodCatForm(request.POST, request.FILES)
@@ -189,3 +192,6 @@ def add_food_category(request):
     else:
         form = FoodCatForm()
     return render(request, 'add_food_category.html', {'form': form})
+
+
+ 

@@ -84,10 +84,23 @@ class asignwaiters(models.Model):
     table_id = models.CharField(max_length=225, primary_key=True)
     emp_id = models.CharField(max_length=225)
     emp_name = models.CharField(max_length=225)
+    emp_status = models.CharField(max_length=225)
+    temp_id = models.CharField(max_length=225)
+    temp_name = models.CharField(max_length=225)
+    temp_status = models.CharField(max_length=225)
     asign_date = models.DateField(auto_now_add=True)
 
     def __str__(self) :
         return self.emp_name
+    
+class waiterAssignHistory(models.Model):
+    table_id = models.CharField(max_length=225)
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.table_id
 
 class employee(models.Model):
     emp_id = models.CharField(max_length=225,primary_key=True)
@@ -109,7 +122,7 @@ class fooditem(models.Model):
     food_id =  models.CharField(max_length=225,primary_key=True)
     foodImage = models.ImageField(upload_to='food',blank=False, null=True)
     name = models.CharField(max_length=100)
-    catagories = models.CharField(max_length=225)
+    catagory = models.CharField(max_length=225, null=True)
     description = models.TextField( )
     short_description = models.TextField(max_length=225)
     subimages = MultiFileField(max_num=3)

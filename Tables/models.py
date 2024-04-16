@@ -183,6 +183,7 @@ class cart(models.Model):
 
 class order(models.Model):
     order_id = models.CharField(max_length=225)
+    POS_id = models.CharField(max_length=225, null=True)
     user_id = models.IntegerField( null=True)
     table_id = models.CharField(max_length=225, null=True)
     name = models.CharField(max_length=225, null=True)
@@ -192,6 +193,7 @@ class order(models.Model):
     time = models.TimeField(auto_now_add=True)
     date = models.DateField(auto_now_add=True)
     payment_method = models.CharField(max_length=225, null=True)
+    discount = models.CharField(max_length=225, null=True)
     value = models.CharField(max_length=225, null=True)
     pay_status = models.CharField(max_length=225,null=True)
     action_status = models.CharField(max_length=225,null=True)
@@ -220,8 +222,9 @@ class POSorder(models.Model):
     date = models.DateField(auto_now_add=True)
     payment_method = models.CharField(max_length=225, null=True)
     value = models.CharField(max_length=225, null=True)
+    discount = models.CharField(max_length=225, null=True)
     pay_status = models.CharField(max_length=225,null=True)
     action_status = models.CharField(max_length=225,null=True)
- 
+    
     def __str__(self) :
         return self.order_id

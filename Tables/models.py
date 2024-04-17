@@ -113,6 +113,8 @@ class employee(models.Model):
     drl = models.CharField(max_length=225,   null=True)
     phone = models.CharField(max_length=225)
     email = models.CharField(max_length=225, null=True)
+    username= models.CharField(max_length=225, null=True)
+    password = models.CharField(max_length=225, null=True)
     role = models.CharField(max_length=225)
     status = models.CharField(max_length=225)
     
@@ -242,3 +244,10 @@ class POScart(models.Model):
     def __str__(self) :
         return self.food_id  
 
+
+class Admin(models.Model):
+    Admin_uname = models.CharField(max_length=225)
+    Admin_password = models.CharField(max_length=225)
+    date = models.DateField(auto_now_add=True)
+    def __str__(self) :
+        return self.Admin_uname 

@@ -1,13 +1,15 @@
 {
-    "builds": [{
-    "src": "server/wsgi.py",
-    "use": "@vercel/python",
-    "config": { "maxLambdaSize": "15mb", "runtime": "python3.8" }
-    }],
+    "version": 2,
+    "builds": [
+      {
+        "src": "Tables/apps.py",
+        "use": "@vercel/python"
+      }
+    ],
     "routes": [
-    {
-    "src": "/(.*)",
-    "dest": "server/wsgi.py"
-    }
+      {
+        "src": "/(.*)",
+        "dest": "Tables/apps.py"
+      }
     ]
-    }
+  }

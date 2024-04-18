@@ -126,7 +126,7 @@ class fooditem(models.Model):
     foodImage = models.ImageField(upload_to='food',blank=False, null=True)
     name = models.CharField(max_length=100)
     catagory = models.CharField(max_length=225, null=True)
-    description = models.TextField( )
+    description = models.TextField()
     short_description = models.TextField(max_length=225)
     subimages = MultiFileField(max_num=3)
     price =models.CharField(max_length=100) 
@@ -137,8 +137,10 @@ class fooditem(models.Model):
 
 class offers(models.Model):
     offer_number = models.IntegerField(primary_key=True)
-    offImage = models.ImageField(upload_to='food',blank=False, null=True)
-    offer_des = models.TextField()
+    offImage = models.ImageField(upload_to='promotion',blank=False, null=True)
+    off_topic = models.CharField(max_length=225)
+    offer = models.CharField(max_length=225)
+    off_condition = models.CharField(max_length=225)
     food_id =  models.CharField(max_length=225)
     food_name = models.CharField(max_length=225)
     started_date = models.DateField(max_length=225)

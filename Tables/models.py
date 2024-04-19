@@ -58,6 +58,8 @@ class IPaddress1(models.Model):
     user_id = models.CharField(max_length=225, unique=True)
     ip_address= models.CharField(max_length=225, unique=True)
     table_id = models.CharField(max_length=225, primary_key=True)
+    emp_id = models.CharField(max_length=225, null=True)
+    table_number = models.CharField(max_length=225, null=True)
     name = models.CharField(max_length=225, null=True)
     phone = models.CharField(max_length=225,null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
@@ -68,7 +70,6 @@ class IPaddress1(models.Model):
         return self.ip_address    
 
 class foodcat(models.Model):
-   
     catImage = models.ImageField(upload_to='catimg',blank=False, null=True)
     cat_id = models.CharField(max_length=225, primary_key=True)
     catname= models.CharField(max_length=225)
@@ -187,9 +188,10 @@ class cart(models.Model):
 
 class order(models.Model):
     order_id = models.CharField(max_length=225)
-    POS_id = models.CharField(max_length=225, null=True)
+    emp_id = models.CharField(max_length=225, null=True)
     user_id = models.IntegerField( null=True)
     table_id = models.CharField(max_length=225, null=True)
+    table_number = models.CharField(max_length=225, null=True)
     name = models.CharField(max_length=225, null=True)
     phone = models.CharField(max_length=225, null=True)
     waiter = models.CharField(max_length=225, null=True)

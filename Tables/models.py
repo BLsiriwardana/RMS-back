@@ -105,18 +105,17 @@ class waiterAssignHistory(models.Model):
 
 class employee(models.Model):
     emp_id = models.CharField(max_length=225,primary_key=True)
-    catImage = models.ImageField(upload_to='employee',blank=False, null=False)
-    emp_name = models.CharField(max_length=225)
-    Birth = models.DateField(max_length=225)
+    catImage = models.ImageField(upload_to='employee',blank=False, null=True)
+    emp_name = models.CharField(max_length=225, null=True)
+    Birth = models.DateField(max_length=225, null=True)
     NIC = models.CharField(max_length=225, unique=True)
-    address = models.CharField(max_length=225)
+    address = models.CharField(max_length=225, null=True)
     drl = models.CharField(max_length=225,   null=True)
-    phone = models.CharField(max_length=225)
+    phone = models.CharField(max_length=225, null=True)
     email = models.CharField(max_length=225, null=True)
-    username= models.CharField(max_length=225, null=True)
     password = models.CharField(max_length=225, null=True)
-    role = models.CharField(max_length=225)
-    status = models.CharField(max_length=225)
+    role = models.CharField(max_length=225, null=True)
+    status = models.CharField(max_length=225, null=True)
     
     def __str__(self) :
         return self.emp_name

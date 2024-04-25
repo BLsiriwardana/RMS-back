@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw
 from multiupload.fields import MultiFileField 
 from django.core.files.base import ContentFile
 from django.http import JsonResponse
-    
+from datetime import date
  
 class Tables(models.Model):
     Code_name = models.CharField(max_length=225,primary_key=True)
@@ -21,7 +21,13 @@ class Tables(models.Model):
     Table_catogary = models.CharField(max_length=200, null=True)
     qr_codes = models.ImageField(upload_to='qr_codes', blank=True , null=True)
     status = models.CharField(max_length=200,null=True)
-    times = models.CharField(max_length=200,null=True)
+    times = models.IntegerField(max_length=200,null=True)
+    cal = models.CharField(max_length=225, null=True)
+
+    def val(self):
+        status = str(self.status)
+        self.cal.save(status,save=True)
+        super.save()
     
     def save(self, *args, **kwargs):
     # Only generate QR code if qr_codes field is empty
@@ -128,7 +134,6 @@ class fooditem(models.Model):
     catagory = models.CharField(max_length=225, null=True)
     description = models.TextField()
     short_description = models.TextField(max_length=225)
-    subimages = MultiFileField(max_num=3)
     price =models.CharField(max_length=100) 
     status = models.IntegerField()
     def __str__(self) :
@@ -254,3 +259,15 @@ class Admin(models.Model):
     date = models.DateField(auto_now_add=True)
     def __str__(self) :
         return self.Admin_uname 
+
+class topfooditem(models.Model):
+    food_id =  models.CharField(max_length=225,primary_key=True)
+    foodImage = models.ImageField(upload_to='food',blank=False, null=True)
+    name = models.CharField(max_length=100)
+    catagory = models.CharField(max_length=225, null=True)
+    description = models.TextField(null=True)
+    short_description = models.TextField(max_length=225, null=True)
+    price =models.CharField(max_length=100, null=True) 
+    status = models.IntegerField(null=True)
+    def __str__(self) :
+        return self.name

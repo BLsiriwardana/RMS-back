@@ -9,6 +9,7 @@ from .models import fooditem
 from .models import waitermessage
 from .models import cart
 from .models import order
+from .models import topfooditem
 from .serializers import TableSerializer
 from .serializers import IPSerializer
 from .serializers import foodcatSerializer
@@ -28,9 +29,11 @@ from pyzbar.pyzbar import decode
 from .serializers import TusersSerializer
 from .models import Tusers
 from rest_framework.response import Response
+from django.http import JsonResponse
 
 from rest_framework.decorators import api_view
 import datetime
+from datetime import date
 from .forms import FoodCatForm
 class Tableview(viewsets.ModelViewSet):
     queryset = Tables.objects.all()
@@ -76,6 +79,11 @@ class orderview(viewsets.ModelViewSet):
 class cartview(viewsets.ModelViewSet):
     queryset = cart.objects.all()
     serializer_class = cartSerializer
+
+class topfooditemview(viewsets.ModelViewSet):
+    queryset = topfooditem.objects.all()
+    serializer_class = topfooditemSerializer
+
 
 class Tusersview(viewsets.ModelViewSet):
     queryset = Tusers.objects.all()
@@ -233,3 +241,107 @@ def get_records_pos_order(request):
     value = request.GET.get('value')
     records = POScart.objects.filter(order_id=value).values()
     return JsonResponse(list(records), safe=False)
+
+def delete(request):
+    quary = cart.objects.all()
+    quary.delete()
+    records = cart.objects.all()
+    return JsonResponse(list(records), safe=False)
+
+
+
+from django.http import JsonResponse
+from .models import POScart
+
+import datetime
+
+ 
+def get_records_pos_order_daily(request):
+    x = datetime.datetime.now()
+    date = x.date()
+
+# Get the first day of the current month
+    first_day_of_month = date.replace(day=1)
+
+# Get the last day of the current month
+    last_day_of_month = first_day_of_month.replace(
+    month=first_day_of_month.month % 12 + 1,
+    day=1
+) - datetime.timedelta(days=1)
+
+# Delete existing records in topfooditem
+    topfooditem.objects.all().delete()
+
+# Retrieve records from the POScart model for the current month
+    records = POScart.objects.filter(date__range=[first_day_of_month, last_day_of_month]).values_list('food_id', flat=True)
+    recordssecond = cart.objects.filter(date__range=[first_day_of_month, last_day_of_month]).values_list('food_id', flat=True)
+    # Count occurrences of each food ID
+    array_1 = []
+    for x in records:
+          array_1.append(x)
+    
+    array_2 = []
+    for y in recordssecond:
+          array_2.append(y)
+
+    combined = array_2 + array_1
+   
+    count_dict = {}
+    for food_id in combined:
+        count_dict[food_id] = count_dict.get(food_id, 0) + 1
+
+    
+    # Sort the dictionary based on the counts in descending order
+    sorted_dict = dict(sorted(count_dict.items(), key=lambda item: item[1], reverse=True))
+     
+    
+    response_data = []
+    for food_id, quantity in sorted_dict.items():
+        response_data.append({"foodid": food_id, "quantity": quantity})
+
+
+
+    final = []
+    x = 0
+    length = len(response_data)
+    while True:
+        if(x == length):
+            break
+        else:
+            data = response_data[x]
+            fdata = data['foodid']
+            final.append(fdata)
+            x += 1
+    
+    y = 0
+    last = []
+    range = final[0:5]
+    length_final = len(range)
+    while True:
+        if( y==length_final ):
+            break
+        else:
+            records = fooditem.objects.get(food_id=range[y])
+            response = {
+                "food_id":records.food_id,
+                "name":records.name
+            }
+            topfooditem.objects.create(
+                food_id=records.food_id,
+                foodImage=records.foodImage,
+                name=records.name,
+                catagory=records.catagory,
+                description=records.description,
+                short_description = records.short_description,
+                price = records.price,
+                status = records.status
+                
+                # Add more fields as needed
+            )
+            
+            last.append(response)
+            y += 1
+    
+    
+    # Return the JsonResponse with the formatted data
+    return JsonResponse(sorted_dict, status=200, safe=False)

@@ -45,6 +45,11 @@ from Tables.views import get_count
 from Tables.views import get_records_pos_id
 from Tables.views import get_records_pos_order
 from Tables.views import get_waiter_employees
+from Tables.views import get_records_pos_order_daily
+from Tables.views import delete
+from Tables.views import topfooditemview
+
+
 route = routers.DefaultRouter()
 route.register("",Tableview, basename="Table View")
 
@@ -87,6 +92,11 @@ POSordeRroute.register("",POSorderview, basename="POS View")
 POScartRroute = routers.DefaultRouter()
 POScartRroute.register("",POScartview, basename="POS cart View")
 
+
+topfooditemRroute = routers.DefaultRouter()
+topfooditemRroute.register("",topfooditemview, basename="POS cart View")
+
+
 urlpatterns = [
     path('', include('Tables.urls')),
     path('admin/', admin.site.urls),
@@ -100,6 +110,7 @@ urlpatterns = [
     path('food/', include(fooditemroute.urls)),
     path('wm/', include(waitermessageroute.urls)),
     path('message/', include(waitermessageroute.urls)),
+    path('topfood/', include(topfooditemRroute.urls)),
     path('carts/', include(cartroute.urls)),    
     path('records/', get_records_by_food_id, name=' get_records_by_food_id'),
     path('order/', include(orderroute.urls)),    
@@ -117,5 +128,7 @@ urlpatterns = [
     path('more_count/', get_count, name='counts'),
     path('pos_records/', get_records_pos_id, name='cart filter'),
     path('pos_orders_time/', get_records_pos_order, name='cart filter'),
+    path('daily_pos/',get_records_pos_order_daily,name="daily"),
+    path('delete/',delete,name="daily")
 ]+static(settings.MEDIA_URL, document_root =settings.MEDIA_ROOT)
 

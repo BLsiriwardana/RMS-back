@@ -13,6 +13,7 @@ from .models import Tusers
 from .models import *
 
 
+
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tables
@@ -83,4 +84,9 @@ class POSorderSerializer(serializers.ModelSerializer):
 class POScartSerializer(serializers.ModelSerializer):
     class Meta:
         model = POScart
+        fields = '__all__'  
+
+class topfooditemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = topfooditem
         fields = '__all__'  
